@@ -23,6 +23,12 @@ namespace makerspace_3dp_admin
             this.project = project;
             this.staffMember = staff;
             this.material = material;
+
+            // Set time
+            this.submitted = DateTime.Now;
+
+            // Attempt to allocate a directory for this request
+            
         }
 
     }
