@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace makerspace_3dp_admin
 {
-    /* 
-     *  This class is responsible for standardising the usage of files and directories.
-     *  Raw file IO functions should not occur outside of here.
-     */
+
+    /// <summary>
+    /// This class is responsible for standardising the usage of files and directories.
+    /// Raw file IO functions should not occur outside of here.
+    /// </summary>
     internal class FileIOManager
     {
         
@@ -18,5 +19,7 @@ namespace makerspace_3dp_admin
         {
 
         }
+
+        // TODO: work out if this is redundant - it is looking like it is
     }
 }

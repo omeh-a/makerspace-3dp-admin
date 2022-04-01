@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace makerspace_3dp_admin
 {
+    /// <summary>
+    /// In-memory representation of a PrintRequest directory.
+    /// </summary>
     internal class PrintRequest
     {
         readonly string printName;

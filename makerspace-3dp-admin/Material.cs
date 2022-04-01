@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace makerspace_3dp_admin
 {
+    /// <summary>
+    /// This class represents a given combination of material and machine
+    /// properties for a given job. This includes a description of the 
+    /// manufacture process to be used, material, colours and other key
+    /// information for Makerspace staff.
+    /// </summary>
     internal class Material
     {
         private TechType techType;
@@ -33,6 +39,11 @@ namespace makerspace_3dp_admin
 
         private string getInfo() { return info; }
 
+        /// <summary>
+        /// Returns a relatively safe suggestion of what machine should be
+        /// used given this Material.
+        /// </summary>
+        /// <returns></returns>
         private string whatPrinter()
         {
             switch (techType)
@@ -42,7 +53,7 @@ namespace makerspace_3dp_admin
                         return ("Ultimaker2/3/S5");
                     else if (this.materialType == MaterialType.TPU)
                         return ("Creality CR10");
-                    else if (this.materialType == MaterialType.Nylon)
+                    else if (this.materialType == MaterialType.Onyx)
                         return ("MarkForged X7");
                     else { return ("Ask Gabo"); }
  
@@ -68,9 +79,9 @@ namespace makerspace_3dp_admin
 
     internal enum MaterialType
     {
-        PLA, PETG, TPU, Nylon, FDM_other,  // FDM
-        Nylon_FG, Nylon_CF,     // CFF
+        PLA, PETG, TPU, Onyx, FDM_other,    // FDM
+        Onyx_Glass, Onyx_Carbon,            // CFF - only include Onyx with fibres
         Resin_Durable, Resin_Clear, Resin_Flex, Resin_Elastic, // SLA
-        METAL // MFF/SLS
+        METAL                               // MFF/SLS. Included for futureproofing
     }
 }
