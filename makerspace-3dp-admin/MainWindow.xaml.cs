@@ -23,6 +23,7 @@ namespace makerspace_3dp_admin
         public MainWindow()
         {
             InitializeComponent();
+            Admin.Init();
         }
     }
 }
