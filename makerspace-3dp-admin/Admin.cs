@@ -46,17 +46,90 @@ namespace makerspace_3dp_admin
                 MessageBoxResult err = MessageBox.Show("System failed to find current execution location! This should never happen, try restarting the program.", "Error");
             }
 
-            // Retrieve print queue location
-            string? pqDir = ConfigurationManager.AppSettings.Get("printQueueDir");
+            // Retrieve working directory location
+            string? pqDir = ConfigurationManager.AppSettings.Get("workingDir");
             
             // Prompt user to set directory if it doesn't exist
             if (pqDir == "")
             {
                 System.Windows.Forms.FolderBrowserDialog ofd = new System.Windows.Forms.FolderBrowserDialog();
                 ofd.ShowDialog();
-                ConfigurationManager.AppSettings.Set("printQueueDir", ofd.SelectedPath);
-                
+                ConfigurationManager.AppSettings.Set("workingDir", ofd.SelectedPath);
             }
+
+            // Try to read in print queue
+            try
+            {
+                string[] printQueueItems = Directory.GetDirectories($"{pqDir}\\PrintQueue");
+                foreach (string pqi in printQueueItems)
+                {
+                    // Try read properties from XML file - if it doesn't exist
+                    // perform fuzzy search on a human-readable text file if it exists.
+                    // This handles the case of a user electing to not use the program.
+
+                    // Todo: xml interpretation
+
+                    // Open info file
+                    string[] files = Directory.GetFiles(pqi, "*.txt");
+
+                    // If there are multiple text files for whatever reason, only look
+                    // at the first one. If there are none, give up (for now)
+                    if (files != null)
+                    {
+                        StreamReader r = new StreamReader(files[0]);
+
+
+                        // These text files are unfortunately very loosely structured,
+                        // with the exception of a author on the first line and staff on
+                        // last line.
+                        string? author = r.ReadLine();
+                        string? project;
+                        string? copies;
+                        string? tech;
+                        string? material;
+                        string? staff;
+                        string? line;
+                        while ((line = r.ReadLine()) != null)
+                        {
+                            if (line.StartsWith("Project:"))
+                            {
+                                project = line.Split(":")[1].Trim();
+                            }
+                            else if (line.StartsWith("Copies:"))
+                            {
+                                copies = line.Split(":")[1].Trim();
+                            }
+                            else if (line.StartsWith("Tech:"))
+                            {
+                                tech = line.Split(":")[1].Trim();
+                            }
+                            else if (line.StartsWith("Material:"))
+                            {
+                                material = line.Split(":")[1].Trim();
+                            }
+
+                            // Relatively hacky way to capture staff name
+                            staff = line.Trim();
+                        }
+
+                    }
+                    // TODO: Handle case where no txt file is provided
+
+                    //PrintRequest r = new PrintRequest();
+                }
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                // If queue folder doesn't exist, ask user if they want to create it.
+                MessageBoxButton buttons = MessageBoxButton.YesNo;
+                MessageBoxResult r = MessageBox.Show("PrintQueue subdirectory doesn't exist. Would you like to create it?", "Error", buttons);
+                if (r == MessageBoxResult.Yes)
+                {
+                    Directory.CreateDirectory($"{pqDir}\\PrintQueue");
+                }
+            }
+
+            // 
 
         }
 
@@ -64,9 +137,44 @@ namespace makerspace_3dp_admin
         /// Create a new job folder and add it to the print queue.
         /// Additionally stores this job as a folder inside of /jobs/toPrint.
         /// </summary>
+        /// <param name="Q">A freshly generated PrintRequest -> should be returned
+        /// by UI.</param>
         /// <returns>JobStatus indicating success or failure.</returns>
-        public JobStatus createNewJob()
+        public static JobStatus createNewJob(PrintRequest Q)
         {
+            // If this is somehow called before program initialises, fail
+            if (_instance == null)
+                return JobStatus.Fail_Uninitialised;
+
+            // Retrieve working directory
+            string? pqDir = ConfigurationManager.AppSettings.Get("workingDir");
+            if (pqDir == null)
+            {
+                return JobStatus.Fail_BadDir;
+            }
+
+            // Check for a duplicate job
+            foreach (PrintRequest r in _instance.printQueue)
+            {
+                if (r.getDir() == Q.getDir())
+                {
+                    // Duplicate found. 
+                    // TODO: add logic to prompt user to handle this case. Bail out gracelessly for now.
+                    return JobStatus.Fail_Duplicate;
+                }
+            }
+
+            // Append to queue
+            _instance.printQueue.Append(Q);
+
+            // Add to folder
+            //try
+            //{
+                Directory.CreateDirectory($"{pqDir}\\{Q.getDir()}");
+            //}
+            
+
+            
             return JobStatus.Success;
         }
 
@@ -81,7 +189,15 @@ namespace makerspace_3dp_admin
         /// <returns>JobStatus indicating success or failure.</returns>
         public JobStatus printJob(PrintRequest Q)
         {
-            return JobStatus.Success;
+            // If this is somehow called before program initialises, fail
+            if (_instance == null)
+                return JobStatus.Fail_Uninitialised;
+
+            // If this job isn't in the queue, it either is invalid or already printing
+            if (!_instance.printQueue.Contains(Q))
+                return JobStatus.Fail_NotInQueue;
+
+            
         }
 
         /// <summary>
@@ -93,6 +209,14 @@ namespace makerspace_3dp_admin
         /// <returns></returns>
         public JobStatus collectJob(PrintRequest Q)
         {
+            // If this is somehow called before program initialises, fail
+            if (_instance == null)
+                return JobStatus.Fail_Uninitialised;
+
+            // If this job isn't in the queue, it either is invalid or already printing
+            if (!_instance.printingQueue.Contains(Q))
+                return JobStatus.Fail_NotInQueue;
+
             return JobStatus.Success;
         }
 
@@ -102,6 +226,6 @@ namespace makerspace_3dp_admin
 
     internal enum JobStatus
     {
-        Success, 
+        Success, Fail_Uninitialised, Fail_NotInQueue, Fail_BadDir, Fail_Duplicate
     }
 }

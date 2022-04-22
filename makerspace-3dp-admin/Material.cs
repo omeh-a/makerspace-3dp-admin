@@ -45,7 +45,7 @@ namespace makerspace_3dp_admin
         /// used given this Material.
         /// </summary>
         /// <returns></returns>
-        private string whatPrinter()
+        public string whatPrinter()
         {
             switch (techType)
             {
@@ -71,11 +71,16 @@ namespace makerspace_3dp_admin
                     return ("May not be printable at this makerspace");
             }
         }
+
+        public string toString()
+        {
+            return $"{this.techType}/{this.materialType}";
+        } 
     }
 
     internal enum TechType
     {
-        FDM, SLA, CFF, MFF, SLS
+        FDM, SLA, CFF, MFF, SLS, UNKNOWN
     }
 
     internal enum MaterialType
@@ -83,6 +88,7 @@ namespace makerspace_3dp_admin
         PLA, PETG, TPU, Onyx, FDM_other,    // FDM
         Onyx_Glass, Onyx_Carbon,            // CFF - only include Onyx with fibres
         Resin_Durable, Resin_Clear, Resin_Flex, Resin_Elastic, // SLA
-        METAL                               // MFF/SLS. Included for futureproofing
+        METAL,                              // MFF/SLS. Included for futureproofing
+        UNKNOWN,
     }
 }
