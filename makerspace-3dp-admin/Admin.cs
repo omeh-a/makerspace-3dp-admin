@@ -71,6 +71,7 @@ namespace makerspace_3dp_admin
 
                     // Open info file
                     string[] files = Directory.GetFiles(pqi, "*.txt");
+                    PrintRequest r;
 
                     // If there are multiple text files for whatever reason, only look
                     // at the first one. If there are none, give up (for now)
@@ -111,6 +112,8 @@ namespace makerspace_3dp_admin
                             // Relatively hacky way to capture staff name
                             staff = line.Trim();
                         }
+                        r = PrintRequest.fuzzyNew(author, project, copies, tech, material, staff);
+
 
                     }
                     // TODO: Handle case where no txt file is provided
