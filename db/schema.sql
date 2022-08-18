@@ -22,5 +22,5 @@ create job Machines (
     material int not null default 0,
     created_at timestamp not null default now(),
     updated_at timestamp not null default now(),
-    curr_job int references Jobs(id) on delete set null,
+    curr_job int references Jobs(id) on delete set null,-s
 );
