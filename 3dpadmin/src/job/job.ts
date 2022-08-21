@@ -1,5 +1,7 @@
 // In-memory representation of a job
 
+import { Machine } from "../machine/machine";
+
 export class Job {
     private name: string;
     private path: string;
