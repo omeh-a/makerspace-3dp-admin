@@ -5,8 +5,7 @@ import SideBar from './components/Sidebar';
 const App: React.FC = () => {
     return (
         <div className="App">
-            <SideBar/>
-            <p>REACTED!</p>
+            
         </div>
     )
 }

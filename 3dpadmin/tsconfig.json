@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "lib": ["es6", "dom"],
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
     "allowJs": true,
     "module": "commonjs",
     "skipLibCheck": true,
@@ -13,7 +14,6 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "jsx": "react",
     "paths": {
       "*": ["node_modules/*"]
     }

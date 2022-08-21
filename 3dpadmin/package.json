@@ -1,6 +1,6 @@
 {
-  "name": "3dp-admin",
-  "productName": "3dp-admin",
+  "name": "3dpadmin",
+  "productName": "3dpadmin",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
@@ -14,7 +14,7 @@
   "keywords": [],
   "author": {
     "name": "omeh-a",
-    "email": "39023043+omeh-a@users.noreply.github.com"
+    "email": "omeh-a@users.noreply.github.com"
   },
   "license": "MIT",
   "config": {
@@ -24,7 +24,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "3dp_admin"
+            "name": "3dpadmin"
           }
         },
         {
@@ -68,30 +68,28 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.63",
-    "@types/react": "^18.0.10",
-    "@types/react-dom": "^18.0.5",
-    "@types/styled-components": "^5.1.26",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "@vercel/webpack-asset-relocator-loader": "1.7.0",
-    "css-loader": "^6.0.0",
-    "electron": "19.0.1",
-    "eslint": "^8.0.1",
-    "eslint-plugin-import": "^2.25.0",
-    "fork-ts-checker-webpack-plugin": "^6.0.1",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.63",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.0",
+    "css-loader": "^6.7.1",
+    "electron": "20.0.3",
+    "eslint": "^8.22.0",
+    "eslint-plugin-import": "^2.26.0",
+    "fork-ts-checker-webpack-plugin": "^6.5.2",
     "node-loader": "^2.0.0",
-    "style-loader": "^3.0.0",
-    "ts-loader": "^9.2.2",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.3.1",
     "typescript": "~4.5.4"
   },
   "dependencies": {
+    "@mui/material": "^5.10.1",
+    "@mui/styled-engine-sc": "^5.10.1",
     "electron-squirrel-startup": "^1.0.0",
-    "mui": "^0.0.1",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "sqlite3": "^5.0.11",
-    "styled": "^1.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "styled-components": "^5.3.5"
   }
 }
