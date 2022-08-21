@@ -9,7 +9,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Jobs from './Machines';
+import Jobs from './Jobs';
 import Machines from './Machines';
 
 

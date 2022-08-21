@@ -10,5 +10,8 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
+    alias: {
+      '@mui/styled-engine': '@mui/styled-engine-sc'
+    },
   },
 };

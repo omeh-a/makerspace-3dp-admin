@@ -5,7 +5,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Jobs: React.FC = () => {
+const Machines: React.FC = () => {
     return(
         <div>
             <h1>Machines</h1>
@@ -13,4 +13,4 @@ const Jobs: React.FC = () => {
     )
 }
 
-export default Jobs;
+export default Machines;
