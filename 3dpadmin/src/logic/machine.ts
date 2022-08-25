@@ -2,7 +2,8 @@
 // Matt Rossouw 2022 (omeh-a)
 
 export enum Model {
-    UM3 = 0,
+    NO_MACHINE = 0,
+    UM3,
     UMS3,
     UMS5,
     CCR10,
@@ -33,4 +34,7 @@ export class Machine {
     private lastService: Date;      // last full service
     private installationDate: Date; // date first installed
     
+    public getName(): string {
+        return this.name;
+    }
 }
