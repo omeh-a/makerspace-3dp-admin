@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Jobs from './Jobs';
 import Machines from './Machines';
+import { Job } from 'src/logic/job';
+import { Queue } from 'src/logic/queue';
 
 
 // Tab panel code here is heavily borrowed from the sample code from MUI (for now).
@@ -50,6 +52,10 @@ function a11yProps(index: number) {
 
 const Main: React.FC = () => {
     const [tab, setTab] = React.useState(0);
+
+    const [printQueue, setPrintQueue] = React.useState(new Queue<Job>());
+    const [printingQueue, setPrintingQueue] = React.useState(new Queue<Job>());
+    const [completedQueue, setCompletedQueue] = React.useState(new Queue<Job>());
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
