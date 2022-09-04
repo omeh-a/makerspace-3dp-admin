@@ -10,11 +10,7 @@ interface ListItemProps {
     job : Job,
 }
 
-/**
- * Representation of a single template. Returns its name to the Selector
- * upon click to let it know which one is selected.
- */
-const SatChip : React.FC<ListItemProps> = ({job}) => {
+const JobChip : React.FC<ListItemProps> = ({job}) => {
     return (
         <Tooltip title = {
             <React.Fragment>
@@ -38,4 +34,4 @@ const SatChip : React.FC<ListItemProps> = ({job}) => {
 }
 
 
-export default SatChip
+export default JobChip;

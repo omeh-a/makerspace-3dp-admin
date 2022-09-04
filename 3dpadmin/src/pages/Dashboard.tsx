@@ -7,7 +7,15 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import { styled } from '@mui/material/styles';
+import { Queue } from '../logic/queue';
+import { Job } from '../logic/job';
+import  QueueList  from '../components/Dashboard/QueueList'
 
+interface DashboardProps {
+    printQueue: Array<Job>;
+    printingQueue: Array<Job>;
+    completedQueue: Array<Job>;
+}
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -17,14 +25,12 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC<DashboardProps> = ({printQueue, printingQueue, completedQueue}) => {
     return (
         <Box sx={{ width: 1 }}>
             <Grid container spacing={3}>
                 <Grid lg>
-                    <Item>
-                        
-                    </Item>
+                    <QueueList jobs={printQueue}/>
                 </Grid>
                 <Grid lg>
                     <Item>lg=6</Item>

@@ -29,4 +29,9 @@ export class Queue<T> {
         this._length--;
         return item;
     }
+    public map(func: (item: T) => void): void {
+        for (let i = 0; i < this._length; i++) {
+            func(this._queue[(this._head + i) % this._size]);
+        }
+    }
 }

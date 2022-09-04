@@ -4,8 +4,8 @@
 
 import { Job } from "../logic/job";
 import { Machine } from "../logic/machine";
-import sqlite3 from "sqlite3";
 
+import sqlite3 from "sqlite3";
 
 const dbPath = "../../../db/3dpadmin.db";
 let db: sqlite3.Database;

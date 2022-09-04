@@ -11,8 +11,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Jobs from './Jobs';
 import Machines from './Machines';
-import { Job } from 'src/logic/job';
-import { Queue } from 'src/logic/queue';
+import { Job, sampleJobs } from '../logic/job';
+import { Queue } from '../logic/queue';
 
 
 // Tab panel code here is heavily borrowed from the sample code from MUI (for now).
@@ -53,9 +53,9 @@ function a11yProps(index: number) {
 const Main: React.FC = () => {
     const [tab, setTab] = React.useState(0);
 
-    const [printQueue, setPrintQueue] = React.useState(new Queue<Job>());
-    const [printingQueue, setPrintingQueue] = React.useState(new Queue<Job>());
-    const [completedQueue, setCompletedQueue] = React.useState(new Queue<Job>());
+    const [printQueue, setPrintQueue] = React.useState(sampleJobs());
+    const [printingQueue, setPrintingQueue] = React.useState(new Array<Job>());
+    const [completedQueue, setCompletedQueue] = React.useState(new Array<Job>());
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
@@ -83,7 +83,8 @@ const Main: React.FC = () => {
                     <Tab label="Machines" {...a11yProps(2)} />
                 </Tabs>
                 <TabPanel value={tab} index={0}>
-                    <Dashboard />
+                    <Dashboard printQueue={printQueue} printingQueue={printingQueue} 
+                    completedQueue={completedQueue}/>
                 </TabPanel>
                 <TabPanel value={tab} index={1}>
                     <Jobs/>
