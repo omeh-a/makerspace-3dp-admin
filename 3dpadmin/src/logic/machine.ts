@@ -1,8 +1,11 @@
 // In-memory representation of a 3D printer
-// Matt Rossouw 2022 (omeh-a)
+// Matt Rossouw (omeh-a)
+// 09/22
+
+import axios from "axios";
 
 export enum Model {
-    NO_MACHINE = 0,
+    GENERIC = 0,
     UM3,
     UMS3,
     UMS5,
@@ -29,39 +32,34 @@ export enum Material {
  * This class represents a machine for internal use and acts as a mirror for
  * database information. Information can be retrieved freely, but setting a field
  * will actually operate directly on the database and flush what is in memory, before
- * resetting them.
+ * resetting them. 
+ * 
+ * This class is the generic version targeting Octoprint machines! Use the Ultimaker class for Ultimaker machines.
  */
 export class Machine {
     private name: string;           // human readable name, given by us
-    private dfid: string;           // digital factory id. unique identifier
     private model: Model;           // machine model
     private loadedMat: Material;    // loaded filament
     private materialLeft: Number;   // approximate remaining filament. works same way as formlabs cartridges
-    private lastService: Date;      // last full service
-    private installationDate: Date; // date first installed
+    private ip: string;             // ip address of the machine
     
-    // Constructors
-
-    /**
-     * Blank constructor for testing
-     */
-    constructor() {
-        this.name = "Chimpanzee";
-        this.dfid = "1234.5667.8901";
-        this.model = Model.UM3;
-        this.loadedMat = Material.PLA;
-        this.materialLeft = 750;
-        this.lastService = new Date();
-        this.installationDate = new Date();
+    constructor(name: string = "Chimpanzee", model: Model = Model.GENERIC
+                , loadedMat: Material = Material.PLA, materialLeft: Number = 100, ip: string = "") {
+        this.name = name;
+        this.model = model;
+        this.loadedMat = loadedMat;
+        this.materialLeft = materialLeft;
+        this.ip = ip;
     }
 
     /** 
-     * @brief ULTIMAKER ONLY: Given IP address, query the machine for its details and create class from that.
-     * @param ipUM: IP address of the machine if it is an Ultimaker 2+Connect, 3, S3 or S5
+     * @brief Given IP address, query the machine for its details and create class from that.
+     * @param ip: IP address of Octoprint host
      */
-    // public Machine(ipUM: string) {
-
-    // }
+    public static fromIP(ip: string): Machine {
+        console.log("Tried to create generic machine from IP - Not yet implemented!");
+        return new Machine();
+    }
 
     // Methods
     
@@ -78,10 +76,6 @@ export class Machine {
         return this.name;
     }
 
-    public getDFID(): string {
-        return this.dfid;
-    }
-
     public getModel(): Model {
         return this.model;
     }
@@ -90,12 +84,46 @@ export class Machine {
         return this.loadedMat;
     }
 
-    public getLastService(): Date {
-        return this.lastService;
+    // public getLastService(): Date {
+    //     return this.lastService;
+    // }
+    // public getInstallationDate(): Date {
+
+    //     return this.installationDate;
+    // }
+
+}
+
+
+/**
+ * Ultimaker extended class. Transparently adds in functionality for Ultimaker API.
+ */
+export class Ultimaker extends Machine {
+    
+    private dfid: string;           // digital factory id. unique identifier
+
+    constructor(name: string = "Ultimaker", dfid: string = "123.456.789", model: Model = Model.UM3
+                , loadedMat: Material = Material.PLA, materialLeft: Number = 100, ip: string = "") {
+        super(name, model, loadedMat, materialLeft, ip);
+        this.dfid = dfid;
     }
 
-    public getInstallationDate(): Date {
-        return this.installationDate;
+    /** 
+     * @brief ULTIMAKER: Given IP address, query the machine for its details and create class from that.
+     * @param ip: IP address of Ultimaker machine
+     */
+     public static fromIP(ip: string): Machine {
+        console.log("Tried to create Ultimaker machine from IP - Not yet implemented!");
+        axios.get("http://" + ip + "/api/v1/system").then((response) => {
+
+        }).catch((error) => { 
+            console.log(error);
+        }
+        return new Ultimaker();
+    }
+
+    public getDFID(): string {
+        return this.dfid;
     }
 
 }

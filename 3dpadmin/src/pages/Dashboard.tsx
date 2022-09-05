@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import { Queue } from '../logic/queue';
 import { Job } from '../logic/job';
 import  QueueList  from '../components/Dashboard/QueueList'
+import { Typography } from '@mui/material';
 
 interface DashboardProps {
     printQueue: Array<Job>;
@@ -30,19 +31,25 @@ const Dashboard: React.FC<DashboardProps> = ({printQueue, printingQueue, complet
         <Box sx={{ width: 1 }}>
             <Grid container spacing={3}>
                 <Grid lg>
+                    <Typography variant="h6" gutterBottom>
+                        Print Queue
+                    </Typography>
                     <QueueList jobs={printQueue}/>
                 </Grid>
                 <Grid lg>
-                    <Item>lg=6</Item>
+                    <Typography variant="h6" gutterBottom>
+                        Printing
+                    </Typography>
+                    <QueueList jobs={printingQueue}/>
                 </Grid>
                 <Grid lg>
-                    <Item>xs</Item>
+                    <Typography variant="h6" gutterBottom>
+                        Completed
+                    </Typography>
+                    <QueueList jobs={completedQueue}/>
                 </Grid>
             </Grid>
         </Box>
-        // <div>
-        //     <h1>Dashboard</h1>
-        // </div>
     )
 }
 

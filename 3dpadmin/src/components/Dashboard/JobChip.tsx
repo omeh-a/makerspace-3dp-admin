@@ -22,6 +22,9 @@ const JobChip : React.FC<ListItemProps> = ({job}) => {
                 <p>
                     {job.getPath()}
                 </p>
+                <p>
+                    Submitted {job.getDate().toLocaleString()}
+                </p>
             </React.Fragment>    
             } arrow >
             <Chip

@@ -70,6 +70,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.63",
+    "@types/axios": "^0.14.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/sqlite3": "^3.1.8",
@@ -95,6 +96,7 @@
     "@mui/material": "^5.10.1",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/system": "^5.10.1",
+    "axios": "^0.27.2",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

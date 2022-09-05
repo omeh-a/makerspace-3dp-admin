@@ -11,8 +11,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Jobs from './Jobs';
 import Machines from './Machines';
-import { Job, sampleJobs } from '../logic/job';
+import { Job, sampleJobs1, sampleJobs2, sampleJobs3 } from '../logic/job';
 import { Queue } from '../logic/queue';
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import { Stack } from '@mui/material';
 
 
 // Tab panel code here is heavily borrowed from the sample code from MUI (for now).
@@ -53,35 +55,40 @@ function a11yProps(index: number) {
 const Main: React.FC = () => {
     const [tab, setTab] = React.useState(0);
 
-    const [printQueue, setPrintQueue] = React.useState(sampleJobs());
-    const [printingQueue, setPrintingQueue] = React.useState(new Array<Job>());
-    const [completedQueue, setCompletedQueue] = React.useState(new Array<Job>());
+    const [printQueue, setPrintQueue] = React.useState(sampleJobs1());
+    const [printingQueue, setPrintingQueue] = React.useState(sampleJobs2());
+    const [completedQueue, setCompletedQueue] = React.useState(sampleJobs3());
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
     };
 
     return (
-        <div>
-            <Typography variant="h6" gutterBottom>
-                3D Print Hub
-            </Typography>
+        <Stack direction="row">
             <Box
-                sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}
+                sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224, width: "30%" }}
             >
-                
-                <Tabs
-                    orientation="vertical"
-                    variant="scrollable"
-                    value={tab}
-                    onChange={handleChange}
-                    aria-label="Vertical tabs example"
-                    sx={{ borderRight: 1, borderColor: 'divider' }}
-                >
-                    <Tab label="Dashboard" {...a11yProps(0)} />
-                    <Tab label="Jobs" {...a11yProps(1)} />
-                    <Tab label="Machines" {...a11yProps(2)} />
-                </Tabs>
+                <Stack>
+                    <Typography variant="h5" gutterBottom>
+                        3D Print Hub
+                    </Typography>
+                    <Tabs
+                        orientation="vertical"
+                        variant="scrollable"
+                        value={tab}
+                        onChange={handleChange}
+                        aria-label="Vertical tabs example"
+                        sx={{ borderRight: 1, borderColor: 'divider' }}
+                    >
+                        <Tab label="Dashboard" {...a11yProps(0)} />
+                        <Tab label="Jobs" {...a11yProps(1)} />
+                        <Tab label="Machines" {...a11yProps(2)} />
+                    </Tabs>
+                </Stack>
+            </Box>
+            <Box
+                sx={{ flexGrow: 1, bgcolor: 'background.paper', width: "70%" }}
+            >
                 <TabPanel value={tab} index={0}>
                     <Dashboard printQueue={printQueue} printingQueue={printingQueue} 
                     completedQueue={completedQueue}/>
@@ -93,7 +100,7 @@ const Main: React.FC = () => {
                     <Machines/>
                 </TabPanel>
             </Box>
-        </div>
+        </Stack>
     )
 }
 
