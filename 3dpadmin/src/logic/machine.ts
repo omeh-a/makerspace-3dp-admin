@@ -112,14 +112,32 @@ export class Ultimaker extends Machine {
      * @brief ULTIMAKER: Given IP address, query the machine for its details and create class from that.
      * @param ip: IP address of Ultimaker machine
      */
-     public static fromIP(ip: string): Machine {
+     public static async fromIP(ip: string): Promise<Machine> {
         console.log("Tried to create Ultimaker machine from IP - Not yet implemented!");
-        axios.get("http://" + ip + "/api/v1/system").then((response) => {
-
-        }).catch((error) => { 
-            console.log(error);
+        
+        // await response from axios
+        let response = await axios.get("http://" + ip + "/api/v1/system");
+        
+        let name: string = response.data.name;
+        let dfid: string = response.data.guid;
+        let model: Model;
+        switch (response.data.variant) { 
+            case "Ultimaker 3":
+                model = Model.UM3;
+                break;
+            case "Ultimaker S3":
+                model = Model.UMS3;
+                break;
+            case "Ultimaker S5":
+                model = Model.UMS5;
+                break;
+            default:
+                model = Model.GENERIC;
+                console.error("WARNING: Unknown Ultimaker model detected! Defaulting to generic.");
         }
+
         return new Ultimaker();
+        
     }
 
     public getDFID(): string {
