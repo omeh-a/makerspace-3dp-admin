@@ -6,19 +6,29 @@ import React from 'react';
 import JobChip from './JobChip';
 import { Queue } from '../../logic/queue';
 import { Job } from '../../logic/job';
-import { Stack } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 
 interface QueueListProps {
     jobs: Array<Job>;
+    title: string;
 }
 
-const QueueList: React.FC<QueueListProps> = ({jobs}) => {
+const QueueList: React.FC<QueueListProps> = ({jobs, title}) => {
     return (
-        <Stack>
-            
-            {jobs.map((job: Job) => (
-                <JobChip job={job} />
-            ))}
+        <Stack sx={{padding:"2px"}}>
+            <Paper elevation={1} sx={{padding:"5px"}}>
+                <Typography variant="h6" gutterBottom>
+                    {title}
+                </Typography>
+                {jobs.map((job: Job) => (
+                    <JobChip job={job} />
+                ))}
+            </Paper>
         </Stack>
     )
 }

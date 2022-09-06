@@ -2,14 +2,31 @@
 // Matt Rossouw (omeh-a)
 // 08/22
 
+import { Box } from '@mui/material';
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import React from 'react';
-import styled from 'styled-components';
+import { Machine } from '../logic/machine';
+import MachineItem from '../components/Machines/MachineItem';
 
-const Machines: React.FC = () => {
+
+interface MachinesProps {
+    machines: Array<Machine>;
+}
+
+const Machines: React.FC<MachinesProps> = ({machines}) => {
+
+
     return(
-        <div>
-            <h1>Machines</h1>
-        </div>
+        <Box sx={{width:"100%"}}>
+            <Grid2 container spacing={2}>
+                {/* Map all machines into MachineItems */}
+                {machines.map((machine: Machine) => (
+                    <Grid2> 
+                        <MachineItem machine={machine} />
+                    </Grid2>
+                ))}
+            </Grid2>
+        </Box>
     )
 }
 

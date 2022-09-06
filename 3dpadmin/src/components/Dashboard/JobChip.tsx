@@ -12,7 +12,7 @@ interface ListItemProps {
 
 const JobChip : React.FC<ListItemProps> = ({job}) => {
     return (
-        <Tooltip title = {
+        <Tooltip placement="right" title = {
             <React.Fragment>
                 <Typography> {job.getName()} </Typography>
                 {/* Show machine name, if this job has a machine assigned */}

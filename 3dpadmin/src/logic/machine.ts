@@ -28,6 +28,8 @@ export enum Material {
     ESUN_ELASTIC,
 }
 
+export const IP_NOT_NETWORKED = "000.000.0.0";
+
 /**
  * This class represents a machine for internal use and acts as a mirror for
  * database information. Information can be retrieved freely, but setting a field
@@ -56,7 +58,7 @@ export class Machine {
      * @brief Given IP address, query the machine for its details and create class from that.
      * @param ip: IP address of Octoprint host
      */
-    public static fromIP(ip: string): Machine {
+    public static async fromIP(ip: string): Promise<Machine> {
         console.log("Tried to create generic machine from IP - Not yet implemented!");
         return new Machine();
     }
@@ -82,6 +84,31 @@ export class Machine {
 
     public getLoadedMaterial(): Material {
         return this.loadedMat;
+    }
+
+    public getIp(): string {
+        return this.ip;
+    }
+
+    public getModelString() : string {
+        switch(this.model) {
+            case Model.GENERIC:
+                return "Generic";
+            case Model.UM3:
+                return "Ultimaker 3";
+            case Model.UMS3:
+                return "Ultimaker S3";
+            case Model.UMS5:
+                return "Ultimaker S5";
+            case Model.CCR10:
+                return "Creality CR-10";
+            case Model.FORM2:
+                return "Formlabs Form 2";
+            case Model.FORM3A:
+                return "Formlabs Form 3";
+            case Model.FORM3B:
+                return "Formlabs Form 3";
+        }
     }
 
     // public getLastService(): Date {
@@ -144,4 +171,18 @@ export class Ultimaker extends Machine {
         return this.dfid;
     }
 
+}
+
+
+/**
+ * @brief List of sample machines for UI testing. Does not invoke any network features.
+ * @returns List of machines.
+ */
+export function sampleMachines1(): Machine[] {
+    let machines: Machine[] = [];
+    machines.push(new Machine("Gibbon", Model.GENERIC, Material.PLA, 750, IP_NOT_NETWORKED));
+    machines.push(new Machine("Gorilla", Model.CCR10, Material.ESUN_ELASTIC, 500, IP_NOT_NETWORKED));
+    machines.push(new Ultimaker("Chimpanzee", "123.456.789", Model.UMS3, Material.PETG, 159, IP_NOT_NETWORKED))
+    machines.push(new Ultimaker("Orangutan", "987.654.321", Model.UM3, Material.PP, 100, IP_NOT_NETWORKED))
+    return machines;
 }
