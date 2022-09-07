@@ -2,7 +2,8 @@
 // Matt Rossouw (omeh-a)
 // 08/22
 
-import React from 'react';
+// React imports
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Dashboard from './Dashboard';
 import Tabs from '@mui/material/Tabs';
@@ -11,13 +12,16 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Jobs from './Jobs';
 import Machines from './Machines';
-import { Job, sampleJobs1, sampleJobs2, sampleJobs3 } from '../logic/job';
 import { Paper, Stack } from '@mui/material';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+
+// Logic imports
 import { Machine, sampleMachines1 } from '../logic/machine';
+import { Job, JobStatus, sampleJobs1, sampleJobs2, sampleJobs3 } from '../logic/job';
+import { getQueuedJobs } from '../logic/dbmanager';
 
 
 // Tab panel code here is heavily borrowed from the sample code from MUI (for now).
@@ -67,6 +71,11 @@ const Main: React.FC = () => {
         setTab(newValue);
     };
 
+    useEffect(() => { 
+        // Get jobs from DB and send them to the appropriate queue.
+        // setPrintQueue(getQueuedJobs());
+    })
+
     return (
         <Paper elevation={0}>
             <Stack direction="row">
@@ -95,14 +104,14 @@ const Main: React.FC = () => {
                     sx={{ flexGrow: 1, bgcolor: 'background.paper', width: "75%" }}
                 >
                     <TabPanel value={tab} index={0}>
-                        <Dashboard printQueue={printQueue} printingQueue={printingQueue} 
-                        completedQueue={completedQueue}/>
+                        <Dashboard printQueue={printQueue} printingQueue={printingQueue}
+                            completedQueue={completedQueue} />
                     </TabPanel>
                     <TabPanel value={tab} index={1}>
-                        <Jobs/>
+                        <Jobs />
                     </TabPanel>
                     <TabPanel value={tab} index={2}>
-                        <Machines machines={machines}/>
+                        <Machines machines={machines} />
                     </TabPanel>
                 </Box>
             </Stack>

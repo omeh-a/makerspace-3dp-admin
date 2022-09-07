@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { Machine, Model } from '../../logic/machine';
+import { Machine, Ultimaker, Model } from '../../logic/machine';
 import { Box, Button, Paper, Stack, Typography } from '@mui/material';
 
 
@@ -32,7 +32,7 @@ const MachineItem: React.FC<MachineItemProps> = ({machine}) => {
                             {machine.getModelString()}
                         </Typography>
                         <Typography>
-                            IPv4: {machine.getIp()}
+                            {machine.getIpString()}
                         </Typography>
                     </Stack>
                     <Stack sx={{padding:"4px"}}>
@@ -40,7 +40,7 @@ const MachineItem: React.FC<MachineItemProps> = ({machine}) => {
                             View machine
                         </Button>
                         {/* Show digital factory button if this machine is an ultimaker */}
-                        {machine.getModel() === Model.UM3 || machine.getModel() === Model.UMS3 || machine.getModel() === Model.UMS5 ? 
+                        { (machine instanceof Ultimaker)  ? 
                             <div>
                                 <Button variant="contained" sx={{margin: "1px", width:"100%"}} onClick={() => {
                                     window.open(`http://${machine.getIp()}/print_jobs`, "_blank");

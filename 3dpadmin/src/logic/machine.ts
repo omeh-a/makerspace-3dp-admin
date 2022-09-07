@@ -4,19 +4,21 @@
 
 import axios from "axios";
 
+// MUST UPDATE THIS IN SQL SCHEMA IF YOU ADD A NEW MODEL!
 export enum Model {
-    GENERIC = 0,
+    GENERIC = 1,    // Enums start at 1 to match SQLite
     UM3,
     UMS3,
     UMS5,
     CCR10,
     FORM2,
-    FORM3A,
-    FORM3B
+    FORM3,
+    FORM3L
 }
 
+// MUST UPDATE THIS IN SQL SCHEMA IF YOU ADD A NEW MATERIAL!
 export enum Material {
-    PLA = 0,
+    PLA = 1,        // Enums start at 1 to match SQLite
     PLA_WHT,
     PLA_BLK,
     PLA_GRY,
@@ -90,6 +92,19 @@ export class Machine {
         return this.ip;
     }
 
+    /**
+     * @brief Get a string describing the network status of this machine
+     * @returns string
+     */
+    public getIpString(): string {
+        if (this.ip == IP_NOT_NETWORKED) return "Not networked.";
+        return `IPv4: ${this.ip}`;
+    }
+
+    /**
+     * @brief Return human-readable model name.
+     * @returns string
+     */
     public getModelString() : string {
         switch(this.model) {
             case Model.GENERIC:
@@ -104,11 +119,12 @@ export class Machine {
                 return "Creality CR-10";
             case Model.FORM2:
                 return "Formlabs Form 2";
-            case Model.FORM3A:
+            case Model.FORM3:
                 return "Formlabs Form 3";
-            case Model.FORM3B:
-                return "Formlabs Form 3";
+            case Model.FORM3L:
+                return "Formlabs Form 3L";
         }
+        return "UNKNOWN";
     }
 
     // public getLastService(): Date {
