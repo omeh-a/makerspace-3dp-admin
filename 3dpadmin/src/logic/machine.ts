@@ -41,12 +41,17 @@ export const IP_NOT_NETWORKED = "000.000.0.0";
  * This class is the generic version targeting Octoprint machines! Use the Ultimaker class for Ultimaker machines.
  */
 export class Machine {
+    // Database synchronised fields
     private name: string;           // human readable name, given by us
     private model: Model;           // machine model
     private loadedMat: Material;    // loaded filament
     private materialLeft: Number;   // approximate remaining filament. works same way as formlabs cartridges
     private ip: string;             // ip address of the machine
     
+    // Live fields
+    private status: string = "offline"; // Current status of the machine
+
+
     constructor(name: string = "Chimpanzee", model: Model = Model.GENERIC
                 , loadedMat: Material = Material.PLA, materialLeft: Number = 100, ip: string = "") {
         this.name = name;
@@ -63,6 +68,12 @@ export class Machine {
     public static async fromIP(ip: string): Promise<Machine> {
         console.log("Tried to create generic machine from IP - Not yet implemented!");
         return new Machine();
+    }
+
+    public async pollNetwork(): Promise<void> {
+        console.log(`Polling ${this.ip}...`)
+        console.log("Not yet implemented for Octoprint!")
+        
     }
 
     // Methods
@@ -90,6 +101,14 @@ export class Machine {
 
     public getIp(): string {
         return this.ip;
+    }
+
+    protected setStatus(status: string) : void {
+        this.status = status;
+    }
+
+    public getStatus(): string {
+        return this.status;
     }
 
     /**
@@ -125,6 +144,10 @@ export class Machine {
                 return "Formlabs Form 3L";
         }
         return "UNKNOWN";
+    }
+
+    public isConnected(): boolean {
+        return this.status !== "offline";
     }
 
     // public getLastService(): Date {
@@ -183,6 +206,48 @@ export class Ultimaker extends Machine {
         
     }
 
+    public async pollNetwork(): Promise<void> {
+        console.log(`Polling Ultimaker ${this.getName()} at ${this.getIp()}...`)
+        
+        // GET printer status using axios, requesting from /api/v1/printer/status 
+        let response = await axios.get("http://" + this.getIp() + "/api/v1/printer/status")
+        .catch((error) => {
+            console.error(`   ${this.getIp()} was not reachable.`);
+            this.setStatus("offline");
+        });
+        if (response == null) return;
+
+        // If printing, check substatus
+        if (response.data == "printing") {
+            let response2 = await axios.get("http://" + this.getIp() + "/api/v1/print_job").catch((error) => {
+                console.error(`   ${this.getIp()} was not reachable.`);
+                this.setStatus("offline");
+            })
+            if (response2 == null) return;
+            switch (response2.data.state) {
+                case "wait_user_action":
+                    if (response2.data.result == "Aborted") {
+                        this.setStatus("Aborted! Action needed.");
+                    } else {
+                        this.setStatus("Action needed.");
+                    }
+                    break;
+                case "pre_print":
+                    this.setStatus("Preparing print... (may need prompt)");
+                    break;
+                case "printing":
+                    if (response2.data.progress == 1.0) {
+                        this.setStatus(`Done: ${response2.data.name}`);
+                    } else {
+                        this.setStatus(`(${String(response2.data.progress* 100).slice(0,4)}%) ${response2.data.name}`);
+                    }
+            }
+        } else {
+            this.setStatus(response.data);
+        }
+
+    }
+
     public getDFID(): string {
         return this.dfid;
     }
@@ -196,6 +261,12 @@ export class Ultimaker extends Machine {
  */
 export function sampleMachines1(): Machine[] {
     let machines: Machine[] = [];
+    machines.push(new Ultimaker("ThornyDevil", "123.456.789", Model.UMS5, Material.PVA, 50, "192.168.0.51"))
+    machines.push(new Ultimaker("Kakapo", "123.456.789", Model.UMS3, Material.PLA, 50, "192.168.0.59"))
+    machines.push(new Ultimaker("Kiwi", "123.456.789", Model.UMS3, Material.PLA, 50, "192.168.0.68"))
+    machines.push(new Ultimaker("Magpie", "123.456.789", Model.UMS3, Material.PLA, 50, "192.168.0.61"))
+    machines.push(new Ultimaker("Macaw", "123.456.789", Model.UMS3, Material.PLA, 50, "192.168.0.66"))
+    machines.push(new Ultimaker("Galah", "123.456.789", Model.UMS3, Material.PLA, 50, "192.168.0.60"))
     machines.push(new Machine("Gibbon", Model.GENERIC, Material.PLA, 750, IP_NOT_NETWORKED));
     machines.push(new Machine("Gorilla", Model.CCR10, Material.ESUN_ELASTIC, 500, IP_NOT_NETWORKED));
     machines.push(new Ultimaker("Chimpanzee", "123.456.789", Model.UMS3, Material.PETG, 159, IP_NOT_NETWORKED))

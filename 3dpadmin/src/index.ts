@@ -19,6 +19,10 @@ if (require('electron-squirrel-startup')) {
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    webPreferences: {
+      webSecurity: false, // This bypasses CORS to let us access the API on printers. Not sure if this is bad
+      nodeIntegration: true,
+    },
     height: 600,
     width: 800,
   });
