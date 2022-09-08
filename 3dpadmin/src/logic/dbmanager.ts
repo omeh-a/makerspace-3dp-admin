@@ -21,7 +21,7 @@ const MachinesTable : string = `
         curr_job int unique,
         FOREIGN KEY (curr_job) REFERENCES Jobs(id)
             on delete set null
-    );
+    )
 `
 
 const JobsTable : string = `
@@ -33,8 +33,8 @@ const JobsTable : string = `
         material int not null,
         machine int,
         state int not null,
-        FOREIGN KEY (machine) REFERENCES Machines(id),
-    );
+        FOREIGN KEY (machine) REFERENCES Machines(id)
+    )
 `
 
 export async function initDb(): Promise<void> {
@@ -50,7 +50,7 @@ export async function initDb(): Promise<void> {
     // install schema
     db.run(MachinesTable, (err: any) => {
         if (err) {
-            console.error(err.message);
+            console.error(`Machines table error: ${err.message}`);
         } else {
             console.log("Installed Machines table.");
         }
@@ -58,7 +58,7 @@ export async function initDb(): Promise<void> {
 
     db.run(JobsTable, (err: any) => {
         if (err) {
-            console.error(err.message);
+            console.error(`Jobs table error: ${err.message}`);
         } else {
             console.log("Installed Jobs table.");
         }

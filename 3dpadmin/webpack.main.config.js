@@ -13,5 +13,11 @@ module.exports = {
     alias: {
       '@mui/styled-engine': '@mui/styled-engine-sc'
     },
+    fallback: {
+      fs: false,
+      'buffer': require.resolve('buffer/'),
+      'util': require.resolve('util/'),
+      'assert': require.resolve('assert/'),
+    }
   },
 };

@@ -73,7 +73,7 @@ const Main: React.FC = () => {
 
     useEffect(() => { 
         // Get jobs from DB and send them to the appropriate queue.
-        // setPrintQueue(getQueuedJobs());
+        setPrintQueue(getQueuedJobs());
     })
 
     return (
