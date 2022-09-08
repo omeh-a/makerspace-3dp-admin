@@ -4,8 +4,8 @@
 
 import React from 'react';
 import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
-import { Machine, Ultimaker, Model } from '../../logic/machine';
-import { Box, Button, Paper, Stack, Typography } from '@mui/material';
+import { Machine, Ultimaker, Model, IP_NOT_NETWORKED } from '../../logic/machine';
+import { Box, Button, ButtonGroup, Paper, Stack, styled, Typography } from '@mui/material';
 
 
 
@@ -13,12 +13,18 @@ interface MachineItemProps {
     machine: Machine;
 }
 
+// const MachineItemButton = styled(Button)() => ({
+
+// });
+
+
 const MachineItem: React.FC<MachineItemProps> = ({machine}) => { 
 
 
     return (
-        <Box sx={{width: "180px"}}>
-            <Paper elevation={2}>
+        <Box sx={{width: "230px", height:"250px"}}>
+            {/* Disable if machine is not connected */}
+            <Paper elevation={2} sx={{height:"100%", width:"100%"}}>
                 <Stack sx={{padding: "4px"}}>
                     <Stack direction="row" >
                         <ExpandCircleDownOutlinedIcon sx={{padding:"5px"}}/>
@@ -28,30 +34,35 @@ const MachineItem: React.FC<MachineItemProps> = ({machine}) => {
                     </Stack>
                     <Stack sx={{padding: "4px"}}>
                         {/* Show a different model string based on Model enum */}
+                        <b>
+                            {machine.getStatus()}
+                        </b>
                         <Typography variant={"body1"}>
                             {machine.getModelString()}
                         </Typography>
-                        <Typography>
+                        {/* <Typography>
                             {machine.getIpString()}
-                        </Typography>
+                        </Typography> */}
                     </Stack>
                     <Stack sx={{padding:"4px"}}>
                         <Button variant="contained" sx={{margin: "1px", width:"100%"}}>
                             View machine
                         </Button>
                         {/* Show digital factory button if this machine is an ultimaker */}
-                        { (machine instanceof Ultimaker)  ? 
+                        { (machine instanceof Ultimaker && machine.isConnected())  ? 
                             <div>
-                                <Button variant="contained" sx={{margin: "1px", width:"100%"}} onClick={() => {
-                                    window.open(`http://${machine.getIp()}/print_jobs`, "_blank");
-                                }}>
-                                    Digital factory
-                                </Button>
-                                <Button variant="contained" sx={{margin: "1px", width:"100%"}} onClick={() => {
-                                    window.open(`http://${machine.getIp()}/?action=stream`, "_blank");
-                                }}>
-                                    Camera feed
-                                </Button>
+                                <ButtonGroup variant="contained" sx={{margin: "1px", width:"100%", height:"5%"}}>
+                                    <Button variant="contained" onClick={() => {
+                                        window.open(`http://${machine.getIp()}/print_jobs`, "_blank");
+                                    }}>
+                                        Digital factory
+                                    </Button>
+                                    <Button variant="contained" onClick={() => {
+                                        window.open(`http://${machine.getIp()}:8080/?action=stream`, "_blank");
+                                    }}>
+                                        Camera feed
+                                    </Button>
+                                </ButtonGroup>
                             </div>
                         : null}
                     </Stack>
